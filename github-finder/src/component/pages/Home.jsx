@@ -1,10 +1,10 @@
-import React from 'react'
+import UserResult from "../layout/Users/UserResult"
 
 function Home() {
   return (
-    <div className="footer p-10 bg-neutral text-neutral-content">
-        <h1>Welcome</h1>
-    </div>
+    <>
+        <UserResult />
+    </>
   )
 }
 
