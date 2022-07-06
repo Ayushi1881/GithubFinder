@@ -68,16 +68,18 @@ function User() {
               )
               }
             </h1>
+            <p className='py-2 text-md text-amber-100'>{bio}</p>
             <div className="mt-4 card-actions">
               <a 
               href={html_url} 
               target='_blank' 
               rel='noreffer' 
-              className='btn btn-outline'>
+              className='btn btn-sm btn-outline text-white'>
                 Visit Github Profile
               </a>
             </div>
           </div>
+          
           <div className="w-full rounded-lg shadow-md bg-base-100 stats">
             {location &&(
               <div className="stat">
