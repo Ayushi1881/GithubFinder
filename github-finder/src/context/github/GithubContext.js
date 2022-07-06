@@ -1,4 +1,5 @@
 import { createContext, useReducer } from "react";
+import { createRenderer } from "react-dom/test-utils";
 import githubReducer from "./GithubReducer";
 
 const GithubContext = createContext()
@@ -10,6 +11,7 @@ export const GithubProvider = ({children}) => {
     const initialState = {
         users: [],
         user:{},
+        repos: [],
         loading: false,
     }
     const [state, dispatch] =useReducer(githubReducer, initialState)
@@ -28,11 +30,15 @@ export const GithubProvider = ({children}) => {
 
         })
     }
+
 //get single user
     const getUser = async (login) => {
         setLoading()
-   
-        const response = await fetch(`${GITHUB_URL}/users/${login}`)
+        const params = new URLSearchParams({
+            sort: 'created',
+            per_page: 10,
+        })
+        const response = await fetch(`${GITHUB_URL}/users/${login}/repos?${params}`)
 
         if(response.status === 404){
             window.location = '/notfound'
@@ -48,6 +54,20 @@ export const GithubProvider = ({children}) => {
 
     }
 
+    //get user repos
+    const getUserRepos = async (login) => {
+        setLoading()
+
+        const response = await fetch(`${GITHUB_URL}/users/${login}/repos`)
+
+        const data = await response.json()
+        dispatch({
+            type: 'GET_REPOS',
+            payload: data,
+
+        })
+    }
+
     //set loading
     const setLoading = () => dispatch({type: 'SET_LOADING'})
 
@@ -56,8 +76,10 @@ export const GithubProvider = ({children}) => {
         users: state.users,
         loading: state.loading,
         user: state.user,
+        repos:state.repos,
         searchUsers,
         getUser,
+        getUserRepos,
     }}>
         {children}
     </GithubContext.Provider>)
